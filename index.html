@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe Game</title>
+    <style>
+      /* CSS styles */
+      body {
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: gray;
+      }
+
+      #container {
+        /* min-height: 100vh; */
+        margin: auto;
+        max-width: 400px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .ram{
+        min-height: 100vh;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 0;
+      }
+
+      table {
+        margin: auto;
+        border-collapse: collapse;
+      }
+
+      td {
+        width: 100px;
+        height: 100px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        border: 2px solid #ccc;
+      }
+
+      td:hover {
+        background-color: #f2f2f2;
+      }
+
+      td.x {
+        color: #f00;
+      }
+
+      td.o {
+        color: #00f;
+      }
+
+      .shy{
+        height: 100px;
+      }
+
+      #reset {
+        display: block;
+        margin: 10px auto;
+        padding: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        background-color: #ff0000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #count {
+        display: block;
+        margin: 10px auto;
+        padding: 10px;
+       
+        font-size: 20px;
+        font-weight: bold;
+        background-color: #00ff77;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #reset:hover,
+      #count:hover {
+        background-color: #aaa;
+      }
+
+      footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #ccc;
+        border-top: 1px solid #999;
+      }
+
+      /* Responsive styles */
+      @media screen and (max-width: 480px) {
+        #container {
+          max-width: 300px;
+        }
+
+        td {
+          width: 80px;
+          height: 80px;
+          font-size: 30px;
+        }
+
+        #reset,
+        #count {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shy">
+
+    </div>
+    <div class="ram">
+    <div id="container">
+      <h1>Tic Tac Toe Game</h1>
+      <table>
+        <tr>
+          <td id="0"></td>
+          <td id="1"></td>
+          <td id="2"></td>
+        </tr>
+        <tr>
+          <td id="3"></td>
+          <td id="4"></td>
+          <td id="5"></td>
+        </tr>
+        <tr>
+          <td id="6"></td>
+          <td id="7"></td>
+          <td id="8"></td>
+        </tr>
+      </table>
+      <button id="reset">Reset</button>
+      <button id="count">Count</button>
+    </div>
+</div>
+    <footer>
+      &copy; 2022 Tic Tac Toe Game | Himanshu Dorbi
+    </footer>
+    <script>
+      // JS code
+      const cells = document.querySelectorAll("td");
+     // const cells = document.querySelectorAll('.cell');
+ 
+      // Initialize variables
+      let currentPlayer = "X";
+      let gameEnded = false;
+      let xWins = 0;
+      let oWins = 0;
+      
+const player1 = 'X';
+const player2 = 'O';
+//currentPlayer = player1;
+
+// Function to check whose turn it is
+function checkTurn() {
+  if (currentPlayer === player1) {
+    console.log("It's Player 1's turn");
+  } else {
+    console.log("It's Player 2's turn");
+  }
+}
+
+// Call the function to check the current turn
+checkTurn();
+
+      // Add event listeners to cells
+      cells.forEach((cell) => {
+        cell.addEventListener("click", () => {
+          if (!gameEnded && cell.textContent === "") {
+            cell.classList.add(currentPlayer.toLowerCase());
+            cell.textContent = currentPlayer;
+            checkWin();
+            switchPlayer();
+          }
+        });
+      });
+
+
+
+      // Add event listener to reset button
+      const resetButton = document.getElementById("reset");
+      resetButton.addEventListener("click", () => {
+        resetGame();
+      });
+
+      // Add event listener to count button
+      const countButton = document.getElementById("count");
+      countButton.addEventListener("click", () => {
+        alert(`player X: ${oWins}\nplayer O: ${xWins}`);
+      });
+
+      // Function to switch players
+      function switchPlayer() {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+      }
+
+      // Function to check if a player has won
+      function checkWin() {
+        const lines = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6],
+        ];
+        lines.forEach((line) => {
+          const [a, b, c] = line;
+          const cellA = document.getElementById(a);
+          const cellB = document.getElementById(b);
+          const cellC = document.getElementById(c);
+          if (
+            cellA.textContent !== "" &&
+            cellA.textContent === cellB.textContent &&
+            cellB.textContent === cellC.textContent
+          ) {
+            cellA.classList.add("winner");
+            cellB.classList.add("winner");
+            cellC.classList.add("winner");
+            gameEnded = true;
+            if (currentPlayer === "X") {
+              oWins++;
+            } else {
+              xWins++;
+            }
+          }
+        });
+      }
+
+      // Function to reset the game
+      function resetGame() {
+        cells.forEach((cell) => {
+          cell.textContent = "";
+          cell.classList.remove("x", "o", "winner");
+        });
+        currentPlayer = "X";
+        gameEnded = false;
+      }
+    </script>
+  </body>
+</html>
